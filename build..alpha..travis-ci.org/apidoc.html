@@ -245,32 +245,6 @@
 
     </ol></li>
 
-    <li class="apidocModuleLi"><a href="#apidoc.module.ember-browserify.included">module ember-browserify.included</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.ember-browserify.included.included">
-            function <span class="apidocSignatureSpan">ember-browserify.</span>included
-            <span class="apidocSignatureSpan">(app)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.ember-browserify.postprocessTree">module ember-browserify.postprocessTree</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.ember-browserify.postprocessTree.postprocessTree">
-            function <span class="apidocSignatureSpan">ember-browserify.</span>postprocessTree
-            <span class="apidocSignatureSpan">(type, tree)</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
     <li class="apidocModuleLi"><a href="#apidoc.module.ember-browserify.stub_generator">module ember-browserify.stub_generator</a><ol>
 
         <li>
@@ -1000,106 +974,6 @@ _rebuild: function(inDir){
     </ul>
 
 
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.ember-browserify.included" id="apidoc.module.ember-browserify.included">module ember-browserify.included</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.ember-browserify.included.included" id="apidoc.element.ember-browserify.included.included">
-        function <span class="apidocSignatureSpan">ember-browserify.</span>included
-        <span class="apidocSignatureSpan">(app)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">included = function (app){
-  var VersionChecker = require(&#x27;ember-cli-version-checker&#x27;);
-
-  var checker = new VersionChecker(this);
-  var emberCliVersion = checker.for(&#x27;ember-cli&#x27;, &#x27;npm&#x27;);
-  var newImportApi;
-
-  if (emberCliVersion.isAbove(&#x27;1.13.8&#x27;)) {
-    newImportApi = true;
-  }
-
-  app = findHost.call(this);
-
-  var enableSourcemaps = app.options.sourcemaps &#x26;&#x26; app.options.sourcemaps.enabled &#x26;&#x26; app.options.sourcemaps.extensions.indexOf(&#x27;
-js&#x27;) &#x3e; -1;
-
-  this.app = app;
-
-  this.options = {
-    root: this.app.project.root,
-    browserifyOptions: app.project.config(app.env).browserify || {},
-    enableSourcemap: enableSourcemaps,
-    fullPaths: app.env !== &#x27;production&#x27;
-  };
-
-  app.import(&#x27;browserify/browserify.js&#x27;);
-  if (app.tests &#x26;&#x26; (process.env.BROWSERIFY_TESTS || this.options.browserifyOptions.tests)) {
-    if (newImportApi) {
-      app.import(&#x27;browserify-tests/browserify.js&#x27;, {
-        type: &#x27;test&#x27;
-      });
-    } else {
-      app.import({
-        test: &#x27;browserify-tests/browserify.js&#x27;
-      });
-    }
-  }
-
-  if (app.importWhitelistFilters) {
-    app.importWhitelistFilters.push(function(moduleName){
-      return moduleName.slice(0,4) === &#x27;npm:&#x27;;
-    });
-  }
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.ember-browserify.postprocessTree" id="apidoc.module.ember-browserify.postprocessTree">module ember-browserify.postprocessTree</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.ember-browserify.postprocessTree.postprocessTree" id="apidoc.element.ember-browserify.postprocessTree.postprocessTree">
-        function <span class="apidocSignatureSpan">ember-browserify.</span>postprocessTree
-        <span class="apidocSignatureSpan">(type, tree)</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">postprocessTree = function (type, tree){
-  var outputFile, options;
-  if (type === &#x27;js&#x27;){
-    outputFile = &#x27;browserify/browserify.js&#x27;;
-  } else if (type === &#x27;test&#x27;){
-    outputFile = &#x27;browserify-tests/browserify.js&#x27;;
-  }
-
-  if (outputFile) {
-    var StubGenerator = require(&#x27;./stub-generator&#x27;);
-    var CachingBrowserify = require(&#x27;./caching-browserify&#x27;);
-    var MergeTrees = require(&#x27;broccoli-merge-trees&#x27;);
-
-    options = Object.create(this.options);
-    options.outputFile = outputFile;
-    tree = new MergeTrees([
-      tree,
-      new CachingBrowserify(new StubGenerator(tree), options)
-    ]);
-  }
-  return tree;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
 
 
 </div>
